@@ -8,6 +8,7 @@
     <img src="https://img.shields.io/badge/-JavaScript-black?style=for-the-badge&logoColor=white&logo=javascript&color=F7DF1E" alt="javascript" />
     <img src="https://img.shields.io/badge/-Gemini AI-black?style=for-the-badge&logoColor=white&logo=gemini&color=412991" alt="gemini ai" />
   </div>
+  
   <h3 align="center">AI Cancer Care (BeatCancer: AI Assistant to Craft Personalized Cancer Care)</h3>
   <div align="center">
     Welcome to the AI Cancer Care project, a revolutionary AI assistant designed to provide personalized cancer care by analyzing patient data, guidelines, and medical records. Our goal is to identify screening gaps and create tailored treatment plans to improve patient outcomes.

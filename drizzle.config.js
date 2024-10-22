@@ -8,3 +8,5 @@ export default {
       "postgresql://beat_cancer_owner:KI4cMmgY9GJB@ep-twilight-boat-a5wededs.us-east-2.aws.neon.tech/beat_cancer?sslmode=require",
   },
 }; 
+
+
