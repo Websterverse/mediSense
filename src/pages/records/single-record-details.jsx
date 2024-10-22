@@ -74,9 +74,25 @@ function SingleRecordDetails() {
 
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
 
-      const prompt = `You are an expert cancer and any disease diagnosis analyst. Use your knowledge base to answer questions about giving personalized recommended treatments.
-        give a detailed treatment plan for me, make it more readable, clear and easy to understand make it paragraphs to make it more readable
+      // const prompt = `You are an expert cancer and any disease diagnosis analyst. Use your knowledge base to answer questions about giving personalized recommended treatments.
+      //   give a detailed treatment plan for me, make it more readable, clear and easy to understand make it paragraphs to make it more readable
+      //   `;
+      // const prompt = `Medi_Sense is your personalized medical report analysis assistant, designed to make complex health information easy to understand. Submit your X-ray report or any medical diagnosis, and Medi_Sense will provide a clear explanation of your condition, along with a personalized treatment plan tailored to your needs. You'll receive insights into the cause of your condition, recommended precautions, and potential future risks if left untreated. Medi_Sense also offers guidance on managing your health with lifestyle adjustments and preventative measures, ensuring that you stay informed and confident in your health decisions. Complex medical reports will be transformed into easy-to-read summaries, giving you the clarity you need to understand your health better.
+      //   `;
+      // const prompt = `create a detailed diagnosis based on info in this image/pdf.
+      //   `;
+      const prompt = `You are MediSense , you work is to  analyzes these reports and provides comprehensive, relevant data, along with suggestions and precautions based on the information contained within them in not so professional manner just be normal humans can understand easily . 
+      additional information you must include in different section headings are : 
+ 1.)Provide  feedback, suggestions, and precautions.
+2.) Show health issues based on report analysis.
+3.)Tell me Any risk assessments for future health problems.
+4.) Is  medical advice from a doctor is required.
+5.) SEE THE report date and Issue reminders for the next check-up based on report data.
+
         `;
+
+
+
 
       const result = await model.generateContent([prompt, ...imageParts]);
       const response = await result.response;
@@ -108,11 +124,11 @@ function SingleRecordDetails() {
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
 
     const prompt = `Your role and goal is to be an that will be using this treatment plan ${analysisResult} to create Columns:
-                - Todo: Tasks that need to be started
-                - Doing: Tasks that are in progress
-                - Done: Tasks that are completed
-          
-                Each task should include a brief description. The tasks should be categorized appropriately based on the stage of the treatment process.
+                - Todo: Tasks that need to be started in more casual and informative  way .  
+                - Doing: Tasks that are in progress Predict potential health issues based on report analysis in casual and informative way  .
+                - Done: Tasks that are completed  Send medicine alerts and reminders based on predictions  in casual and informative way  .
+
+                Each task should include a brief and wel structured formatted  description. The tasks should be categorized appropriately based on the stage of the treatment process .
           
                 Please provide the results in the following  format for easy front-end display no quotating or what so ever just pure the structure below:
 
@@ -132,6 +148,10 @@ function SingleRecordDetails() {
                 }
                             
                 `;
+
+
+
+
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
