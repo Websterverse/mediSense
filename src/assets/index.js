@@ -7,3 +7,5 @@ import screening from "./screening.svg";
 import user from "./user.svg";
 import apps from "./apps.svg";
 export { sun, search, menu, loader, records, screening, user, apps };
+
+
