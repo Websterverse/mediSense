@@ -7,6 +7,8 @@ export const navlinks = [
     link: "/",
   },
   {
+
+    
     name: "records",
     imgUrl: records,
     link: "/medical-records",

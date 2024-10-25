@@ -7,6 +7,8 @@ function TaskCard({ task, deleteTask, updateTask }) {
   const [mouseIsOver, setMouseIsOver] = useState(false);
   const [editMode, setEditMode] = useState(true);
 
+
+  
   const {
     setNodeRef,
     attributes,

@@ -6,6 +6,8 @@ import { eq } from "drizzle-orm";
 // Create a context
 const StateContext = createContext();
 
+
+
 // Provider component
 export const StateContextProvider = ({ children }) => {
   const [users, setUsers] = useState([]);

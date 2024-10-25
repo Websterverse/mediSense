@@ -10,6 +10,8 @@ const RecordDetailsHeader = ({ recordName }) => {
             <IconFolderOpen size={70} className="text-green-500" />
           </div>
         </div>
+
+        
         <a
           className="inline-flex items-center justify-between rounded-b-xl border-t border-gray-200 px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 md:px-5 dark:border-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800"
           href="#"

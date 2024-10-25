@@ -6,6 +6,8 @@ import { useStateContext } from "../../context/index";
 import CreateRecordModal from "./components/create-record-modal"; // Adjust the import path
 import RecordCard from "./components/record-card"; // Adjust the import path
 
+
+
 const Index = () => {
   const navigate = useNavigate();
   const { user } = usePrivy();

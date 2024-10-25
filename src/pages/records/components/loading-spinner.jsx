@@ -2,6 +2,8 @@ import React from "react";
 
 const LoadingSpinner = ({ size = 8, color = "green-500" }) => {
   return (
+
+    
     <svg
       aria-hidden="true"
       className={`inline h-${size} w-${size} animate-spin fill-${color} text-gray-200 dark:text-gray-600`}

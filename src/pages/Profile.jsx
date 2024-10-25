@@ -6,6 +6,8 @@ const Profile = () => {
   const { currentUser, fetchUserByEmail } = useStateContext();
   const { user } = usePrivy();
 
+
+  
   useEffect(() => {
     if (!currentUser) {
       fetchUserByEmail(user?.email?.address);

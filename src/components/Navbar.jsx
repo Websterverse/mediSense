@@ -3,10 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { usePrivy } from "@privy-io/react-auth";
 import { useStateContext } from "../context"; // Adjust the import path
 
+
+
 import { CustomButton } from ".";
 import { menu, search } from "../assets";
 import { navlinks } from "../constants";
 import { IconHeartHandshake } from "@tabler/icons-react";
+
 
 const Navbar = () => {
   const navigate = useNavigate();

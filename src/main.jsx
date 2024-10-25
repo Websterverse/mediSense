@@ -7,6 +7,8 @@ import App from "./App";
 import "./index.css";
 import { PrivyProvider } from "@privy-io/react-auth";
 
+
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(

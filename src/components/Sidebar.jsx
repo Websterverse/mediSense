@@ -11,6 +11,7 @@ const Icon = ({ styles, name, imgUrl, isActive, disabled, handleClick }) => (
       isActive && isActive === name && "bg-[#2c2f32]"
     } flex items-center justify-center ${
       !disabled && "cursor-pointer"
+      
     } ${styles}`}
     onClick={handleClick}
   >

@@ -6,4 +6,6 @@ const Home = () => {
   return <DisplayInfo />;
 };
 
+
+
 export default Home;

@@ -4,6 +4,8 @@ import Modal from "./Modal";
 const CreateRecordModal = ({ isOpen, onClose, onCreate }) => {
   const [foldername, setFoldername] = useState("");
 
+
+  
   const handleCreate = () => {
     onCreate(foldername);
     setFoldername("");

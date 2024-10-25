@@ -7,6 +7,8 @@ import ScreeningSchedule from "./pages/ScreeningSchedule";
 import SingleRecordDetails from "./pages/records/single-record-details";
 import { useStateContext } from "./context";
 
+
+
 const App = () => {
   const { user, authenticated, ready, login, currentUser } = useStateContext();
   const navigate = useNavigate();
