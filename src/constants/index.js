@@ -1,5 +1,5 @@
 import { records, screening, user, apps } from "../assets";
-
+import { IconHome } from "@tabler/icons-react";
 export const navlinks = [
   {
     name: "dashboard",
@@ -13,6 +13,7 @@ export const navlinks = [
     imgUrl: records,
     link: "/medical-records",
   },
+
   {
     name: "screening",
     imgUrl: screening,
