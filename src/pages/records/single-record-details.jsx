@@ -256,60 +256,686 @@
 // ------------------------------ 3rd ------------------------------------------------
 
 
-import React, { useState } from "react";
+// import React, { useState } from "react";
+// import {
+//   IconChevronRight,
+//   IconFileUpload,
+//   IconProgress,
+//   IconSend,
+// } from "@tabler/icons-react";
+
+// import { useLocation, useNavigate } from "react-router-dom";
+// import { useStateContext } from "../../context/index";
+// import ReactMarkdown from "react-markdown";
+// import FileUploadModal from "./components/file-upload-modal";
+// import RecordDetailsHeader from "./components/record-details-header";
+// import { GoogleGenerativeAI } from "@google/generative-ai";
+
+// const geminiApiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
+// function SingleRecordDetails() {
+//   const { state } = useLocation();
+//   const navigate = useNavigate();
+//   const [file, setFile] = useState(null);
+//   const [uploading, setUploading] = useState(false);
+//   const [uploadSuccess, setUploadSuccess] = useState(false);
+//   const [processing, setIsProcessing] = useState(false);
+  
+//   // Ensure the initial analysis result is correctly initialized
+//   const [analysisResult, setAnalysisResult] = useState(
+//     state?.analysisResult || "" // Use state if passed, otherwise empty string
+//   );
+//   const [filename, setFilename] = useState("");
+//   const [filetype, setFileType] = useState("");
+//   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+//   // Chat state
+//   const [chatInput, setChatInput] = useState("");
+//   const [chatHistory, setChatHistory] = useState([
+//     { role: "ai", content: analysisResult || "Please upload a medical report for analysis." }, // Default message based on analysisResult
+//   ]);
+
+//   const { updateRecord } = useStateContext();
+
+//   const handleOpenModal = () => {
+//     setIsModalOpen(true);
+//   };
+
+//   const handleCloseModal = () => {
+//     setIsModalOpen(false);
+//   };
+
+//   const handleFileChange = (e) => {
+//     const file = e.target.files[0];
+//     setFileType(file.type);
+//     setFilename(file.name);
+//     setFile(file);
+//   };
+
+//   const readFileAsBase64 = (file) => {
+//     return new Promise((resolve, reject) => {
+//       const reader = new FileReader();
+//       reader.onload = () => resolve(reader.result.split(",")[1]);
+//       reader.onerror = reject;
+//       reader.readAsDataURL(file);
+//     });
+//   };
+
+//   const handleFileUpload = async () => {
+//     setUploading(true);
+//     setUploadSuccess(false);
+
+//     const genAI = new GoogleGenerativeAI(geminiApiKey);
+
+//     try {
+//       const base64Data = await readFileAsBase64(file);
+
+//       const imageParts = [
+//         {
+//           inlineData: {
+//             data: base64Data,
+//             mimeType: filetype,
+//           },
+//         },
+//       ];
+
+//       const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+
+//       const prompt = `Analyze the following medical report image.`; // Example prompt
+      
+//       const result = await model.generateContent([prompt, ...imageParts]);
+//       const response = await result.response;
+//       const text = response.text();
+//       setAnalysisResult(text);
+
+//       // Update chat history with analysis result
+//       setChatHistory([...chatHistory, { role: "ai", content: text }]);
+
+//       // Update the record with analysis result
+//       const updatedRecord = await updateRecord({
+//         documentID: state.id,
+//         analysisResult: text,
+//         kanbanRecords: "",
+//       });
+
+//       setUploadSuccess(true);
+//       setIsModalOpen(false);
+//       setFilename("");
+//       setFile(null);
+//       setFileType("");
+//     } catch (error) {
+//       console.error("Error uploading file:", error);
+//       setUploadSuccess(false);
+//     } finally {
+//       setUploading(false);
+//     }
+//   };
+
+//   // Handle chat input submission
+//   const handleChatSubmit = async () => {
+//     if (!chatInput) return;
+
+//     const genAI = new GoogleGenerativeAI(geminiApiKey);
+
+//     try {
+//       const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+
+//       const prompt = `User: ${chatInput}\nMediSense AI based on the medical analysis: ${analysisResult}\nResponse:`;
+
+//       const result = await model.generateContent([prompt]);
+//       const response = await result.response;
+//       const text = response.text();
+
+//       // Update chat history with user input and AI response
+//       setChatHistory([
+//         ...chatHistory,
+//         { role: "user", content: chatInput },
+//         { role: "ai", content: text },
+//       ]);
+
+//       setChatInput(""); // Clear the input field
+//     } catch (error) {
+//       console.error("Error in chat:", error);
+//     }
+//   };
+
+//   const processTreatmentPlan = async () => {
+//     setIsProcessing(true);
+
+//     const genAI = new GoogleGenerativeAI(geminiApiKey);
+
+//     const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+
+//     const prompt = `...` // Your treatment plan prompt
+
+//     const result = await model.generateContent([prompt]);
+//     const response = await result.response;
+//     const text = response.text();
+//     const parsedResponse = JSON.parse(text);
+
+//     const updatedRecord = await updateRecord({
+//       documentID: state.id,
+//       kanbanRecords: text,
+//     });
+
+//     navigate("/screening-schedules", { state: parsedResponse });
+//     setIsProcessing(false);
+//   };
+
+//   return (
+//     <div className="flex flex-wrap gap-[26px]">
+//       <button
+//         type="button"
+//         onClick={handleOpenModal}
+//         className="mt-6 inline-flex items-center gap-x-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50"
+//       >
+//         <IconFileUpload />
+//         Upload Reports
+//       </button>
+//       <FileUploadModal
+//         isOpen={isModalOpen}
+//         onClose={handleCloseModal}
+//         onFileChange={handleFileChange}
+//         onFileUpload={handleFileUpload}
+//         uploading={uploading}
+//         uploadSuccess={uploadSuccess}
+//         filename={filename}
+//       />
+//       <RecordDetailsHeader recordName={state.recordName} />
+//       <div className="w-full">
+//         <div className="flex flex-col">
+//           <div className="-m-1.5 overflow-x-auto">
+//             <div className="inline-block min-w-full p-1.5 align-middle">
+//               <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+//                 <div className="border-b border-gray-200 px-6 py-4">
+//                   <h2 className="text-xl font-semibold text-gray-800">
+//                     Personalized AI-Driven Treatment Plan
+//                   </h2>
+//                   <p className="text-sm text-gray-600">
+//                     A tailored medical strategy leveraging advanced AI insights.
+//                   </p>
+//                 </div>
+
+//                 {/* Chat window */}
+//                 <div className="px-6 py-4">
+//                   <h2 className="text-lg font-semibold">Chat with AI</h2>
+//                   <div className="space-y-2">
+//                     {chatHistory.map((message, index) => (
+//                       <div
+//                         key={index}
+//                         className={`${
+//                           message.role === "user"
+//                             ? "text-right text-blue-600"
+//                             : "text-left text-gray-800"
+//                         }`}
+//                       >
+//                         <p>{message.content}</p>
+//                       </div>
+//                     ))}
+//                   </div>
+//                 </div>
+
+//                 {/* Chat input */}
+//                 <div className="flex items-center gap-x-2 px-6 py-4">
+//                   <input
+//                     type="text"
+//                     value={chatInput}
+//                     onChange={(e) => setChatInput(e.target.value)}
+//                     className="w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+//                     placeholder="Ask MediSense AI anything..."
+//                   />
+//                   <button
+//                     onClick={handleChatSubmit}
+//                     className="inline-flex items-center gap-x-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50"
+//                   >
+//                     <IconSend />
+//                     Send
+//                   </button>
+//                 </div>
+
+//                 <div className="px-6 py-4">
+//                   <button
+//                     type="button"
+//                     onClick={processTreatmentPlan}
+//                     disabled={processing}
+//                     className="inline-flex items-center gap-x-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500"
+//                   >
+//                     <IconProgress />
+//                     {processing ? "Processing..." : "Generate Treatment Plan"}
+//                   </button>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default SingleRecordDetails;
+
+// ---------------------------------------------------------------------
+
+
+
+// import React, { useState } from "react";
+// import {
+//   IconChevronRight,
+//   IconFileUpload,
+//   IconProgress,
+// } from "@tabler/icons-react";
+// import { useLocation } from "react-router-dom";
+// import { GoogleGenerativeAI } from "@google/generative-ai";
+// import ReactMarkdown from "react-markdown";
+// import FileUploadModal from "./components/file-upload-modal";
+// // import ChatBot from "./components/chat-bot.jsx";
+// import ChatBot from "../chat-bot";
+// const geminiApiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
+// function MedicalReportAnalysis() {
+//   const { state } = useLocation();
+//   const [file, setFile] = useState(null);
+//   const [uploading, setUploading] = useState(false);
+//   const [analysisResult, setAnalysisResult] = useState("");
+//   const [isChatOpen, setIsChatOpen] = useState(false);
+//   const [chatHistory, setChatHistory] = useState([]);
+//   const [filename, setFilename] = useState("");
+//   const [filetype, setFileType] = useState("");
+//   const [isModalOpen, setIsModalOpen] = useState(false);
+
+//   const handleOpenModal = () => setIsModalOpen(true);
+//   const handleCloseModal = () => setIsModalOpen(false);
+
+//   const handleFileChange = (e) => {
+//     const selectedFile = e.target.files[0];
+//     setFile(selectedFile);
+//     setFileType(selectedFile.type);
+//     setFilename(selectedFile.name);
+//   };
+
+//   const readFileAsBase64 = (file) => {
+//     return new Promise((resolve, reject) => {
+//       const reader = new FileReader();
+//       reader.onload = () => resolve(reader.result.split(",")[1]);
+//       reader.onerror = reject;
+//       reader.readAsDataURL(file);
+//     });
+//   };
+
+//   const handleFileUpload = async () => {
+//     setUploading(true);
+//     const genAI = new GoogleGenerativeAI(geminiApiKey);
+
+//     try {
+//       const base64Data = await readFileAsBase64(file);
+
+//       const imageParts = [
+//         {
+//           inlineData: {
+//             data: base64Data,
+//             mimeType: filetype,
+//           },
+//         },
+//       ];
+
+//       const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+//       const prompt = `You are MediSense, an AI medical assistant. Analyze the following medical report data and provide a detailed response:
+//         - Is the report normal or abnormal?
+//         - What health implications could the data suggest?
+//         - Are there any recommendations for doctor consultation or follow-ups?
+//         - Suggest precautions and potential future risks based on the data.
+        
+//         Include a warning that the AI analysis should not replace professional medical advice.`;
+
+//       const result = await model.generateContent([prompt, ...imageParts]);
+//       const response = await result.response;
+//       const text = response.text();
+//       setAnalysisResult(text);
+
+//       // Store report and analysis for chatbot use
+//       setChatHistory((prev) => [
+//         ...prev,
+//         { role: "system", content: "Medical report uploaded and analyzed." },
+//         { role: "assistant", content: text },
+//       ]);
+
+//       setIsModalOpen(false); // Close modal
+//       setFilename("");
+//       setFile(null);
+//       setFileType("");
+//     } catch (error) {
+//       console.error("Error uploading file:", error);
+//     } finally {
+//       setUploading(false);
+//     }
+//   };
+
+//   const handleChatSubmit = async (userInput) => {
+//     const genAI = new GoogleGenerativeAI(geminiApiKey);
+
+//     try {
+//       const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+//       const chatPrompt = `
+//         You are MediSense, an AI assistant. Based on the uploaded medical report analysis, answer user questions accurately. 
+//         Use the following context:
+//         ${analysisResult}
+
+//         User query: ${userInput}
+//       `;
+
+//       const result = await model.generateContent(chatPrompt);
+//       const response = await result.response;
+//       const botReply = response.text();
+
+//       setChatHistory((prev) => [
+//         ...prev,
+//         { role: "user", content: userInput },
+//         { role: "assistant", content: botReply },
+//       ]);
+//     } catch (error) {
+//       console.error("Error during chatbot interaction:", error);
+//     }
+//   };
+
+//   return (
+//     <div className="flex flex-wrap gap-[26px]">
+//       <button
+//         type="button"
+//         onClick={handleOpenModal}
+//         className="mt-6 inline-flex items-center gap-x-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50"
+//       >
+//         <IconFileUpload />
+//         Upload Medical Report
+//       </button>
+//       <FileUploadModal
+//         isOpen={isModalOpen}
+//         onClose={handleCloseModal}
+//         onFileChange={handleFileChange}
+//         onFileUpload={handleFileUpload}
+//         uploading={uploading}
+//         filename={filename}
+//       />
+//       <div className="w-full mt-6">
+//         <h2 className="text-xl font-semibold">Medical Report Analysis</h2>
+//         {analysisResult ? (
+//           <div>
+//             <ReactMarkdown>{analysisResult}</ReactMarkdown>
+//             <button
+//               type="button"
+//               onClick={() => setIsChatOpen(true)}
+//               className="mt-4 inline-flex items-center gap-x-2 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+//             >
+//               Ask Follow-Up Questions
+//             </button>
+//           </div>
+//         ) : (
+//           <p>No analysis available yet. Upload a report to begin.</p>
+//         )}
+//       </div>
+//       {isChatOpen && (
+//         <ChatBot
+//           chatHistory={chatHistory}
+//           onChatSubmit={handleChatSubmit}
+//         />
+//       )}
+//     </div>
+//   );
+// }
+
+// export default MedicalReportAnalysis;
+
+// -------------------------------------------------
+// 4th
+
+
+// import React, { useState, useEffect } from "react";
+// import {
+//   IconChevronRight,
+//   IconFileUpload,
+//   IconProgress,
+// } from "@tabler/icons-react";
+// import { useLocation } from "react-router-dom";
+// import { GoogleGenerativeAI } from "@google/generative-ai";
+// import ReactMarkdown from "react-markdown";
+// import FileUploadModal from "./components/file-upload-modal";
+// import ChatBot from "../chat-bot"; // Assuming ChatBot component exists
+// const geminiApiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
+// function MedicalReportAnalysis() {
+//   const { state } = useLocation();
+//   const [file, setFile] = useState(null);
+//   const [uploading, setUploading] = useState(false);
+//   const [analysisResult, setAnalysisResult] = useState("");
+//   const [isChatOpen, setIsChatOpen] = useState(false);
+//   const [chatHistory, setChatHistory] = useState([]);
+//   const [filename, setFilename] = useState("");
+//   const [filetype, setFileType] = useState("");
+//   const [isModalOpen, setIsModalOpen] = useState(false);
+
+//   // Load chat history and analysis result from localStorage on mount
+//   useEffect(() => {
+//     const savedChatHistory = localStorage.getItem("chatHistory");
+//     const savedAnalysisResult = localStorage.getItem("analysisResult");
+
+//     if (savedChatHistory) {
+//       setChatHistory(JSON.parse(savedChatHistory));
+//     }
+
+//     if (savedAnalysisResult) {
+//       setAnalysisResult(savedAnalysisResult);
+//     }
+//   }, []);
+
+//   // Save chat history and analysis result to localStorage whenever they change
+//   useEffect(() => {
+//     localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+//   }, [chatHistory]);
+
+//   useEffect(() => {
+//     localStorage.setItem("analysisResult", analysisResult);
+//   }, [analysisResult]);
+
+//   const handleOpenModal = () => setIsModalOpen(true);
+//   const handleCloseModal = () => setIsModalOpen(false);
+
+//   const handleFileChange = (e) => {
+//     const selectedFile = e.target.files[0];
+//     setFile(selectedFile);
+//     setFileType(selectedFile.type);
+//     setFilename(selectedFile.name);
+//   };
+
+//   const readFileAsBase64 = (file) => {
+//     return new Promise((resolve, reject) => {
+//       const reader = new FileReader();
+//       reader.onload = () => resolve(reader.result.split(",")[1]);
+//       reader.onerror = reject;
+//       reader.readAsDataURL(file);
+//     });
+//   };
+
+//   const handleFileUpload = async () => {
+//     setUploading(true);
+//     const genAI = new GoogleGenerativeAI(geminiApiKey);
+
+//     try {
+//       const base64Data = await readFileAsBase64(file);
+
+//       const imageParts = [
+//         {
+//           inlineData: {
+//             data: base64Data,
+//             mimeType: filetype,
+//           },
+//         },
+//       ];
+
+//       const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+//       const prompt = `You are MediSense, an AI medical assistant. Analyze the following medical report data and provide a detailed response:
+//         - Is the report normal or abnormal?
+//         - What health implications could the data suggest?
+//         - Are there any recommendations for doctor consultation or follow-ups?
+//         - Suggest precautions and potential future risks based on the data.
+        
+//         Include a warning that the AI analysis should not replace professional medical advice.`;
+
+//       const result = await model.generateContent([prompt, ...imageParts]);
+//       const response = await result.response;
+//       const text = response.text();
+//       setAnalysisResult(text);
+
+//       // Update chat history with the initial analysis
+//       setChatHistory((prev) => [
+//         ...prev,
+//         { role: "system", content: "Medical report uploaded and analyzed." },
+//         { role: "assistant", content: text },
+//       ]);
+
+//       setIsModalOpen(false); // Close modal
+//       setFilename("");
+//       setFile(null);
+//       setFileType("");
+//     } catch (error) {
+//       console.error("Error uploading file:", error);
+//     } finally {
+//       setUploading(false);
+//     }
+//   };
+
+//   const handleChatSubmit = async (userInput) => {
+//     const genAI = new GoogleGenerativeAI(geminiApiKey);
+
+//     try {
+//       const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+//       const chatPrompt = `
+//         You are MediSense, an AI assistant. Based on the uploaded medical report analysis, answer user questions accurately. 
+//         Use the following context:
+//         ${analysisResult}
+
+//         User query: ${userInput}
+//       `;
+
+//       const result = await model.generateContent(chatPrompt);
+//       const response = await result.response;
+//       const botReply = response.text();
+
+//       setChatHistory((prev) => [
+//         ...prev,
+//         { role: "user", content: userInput },
+//         { role: "assistant", content: botReply },
+//       ]);
+//     } catch (error) {
+//       console.error("Error during chatbot interaction:", error);
+//     }
+//   };
+
+//   return (
+//     <div className="flex flex-wrap gap-[26px]">
+//       <button
+//         type="button"
+//         onClick={handleOpenModal}
+//         className="mt-6 inline-flex items-center gap-x-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50"
+//       >
+//         <IconFileUpload />
+//         Upload Medical Report
+//       </button>
+//       <FileUploadModal
+//         isOpen={isModalOpen}
+//         onClose={handleCloseModal}
+//         onFileChange={handleFileChange}
+//         onFileUpload={handleFileUpload}
+//         uploading={uploading}
+//         filename={filename}
+//       />
+//       <div className="w-full mt-6">
+//         <h2 className="text-xl text-white   font-semibold">Medical Report Analysis</h2>
+//         {analysisResult ? (
+//           <div>
+//             <ReactMarkdown  className={"text-gray-400"} >{analysisResult}</ReactMarkdown>
+//             <button
+//               type="button"
+//               onClick={() => setIsChatOpen(true)}
+//               className="mt-4 inline-flex items-center gap-x-2 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+//             >
+//               Ask Follow-Up Questions
+//             </button>
+//           </div>
+//         ) : (
+//           <p>No analysis available yet. Upload a report to begin.</p>
+//         )}
+//       </div>
+//       {isChatOpen && (
+//         <ChatBot
+//           chatHistory={chatHistory}
+//           onChatSubmit={handleChatSubmit}
+//         />
+//       )}
+//     </div>
+//   );
+// }
+
+// export default MedicalReportAnalysis;
+
+
+// ---- ?
+// final //
+
+import React, { useState, useEffect } from "react";
 import {
   IconChevronRight,
   IconFileUpload,
   IconProgress,
-  IconSend,
 } from "@tabler/icons-react";
-
-import { useLocation, useNavigate } from "react-router-dom";
-import { useStateContext } from "../../context/index";
+import { useLocation } from "react-router-dom";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import ReactMarkdown from "react-markdown";
 import FileUploadModal from "./components/file-upload-modal";
-import RecordDetailsHeader from "./components/record-details-header";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
+import ChatBot from "../chat-bot"; // Assuming ChatBot component exists
 const geminiApiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
-function SingleRecordDetails() {
+function MedicalReportAnalysis() {
   const { state } = useLocation();
-  const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
-  const [uploadSuccess, setUploadSuccess] = useState(false);
-  const [processing, setIsProcessing] = useState(false);
-  
-  // Ensure the initial analysis result is correctly initialized
-  const [analysisResult, setAnalysisResult] = useState(
-    state?.analysisResult || "" // Use state if passed, otherwise empty string
-  );
+  const [analysisResult, setAnalysisResult] = useState("");
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatHistory, setChatHistory] = useState([]);
   const [filename, setFilename] = useState("");
   const [filetype, setFileType] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
-  // Chat state
-  const [chatInput, setChatInput] = useState("");
-  const [chatHistory, setChatHistory] = useState([
-    { role: "ai", content: analysisResult || "Please upload a medical report for analysis." }, // Default message based on analysisResult
-  ]);
 
-  const { updateRecord } = useStateContext();
+  // Load chat history and analysis result from localStorage on mount
+  useEffect(() => {
+    const savedChatHistory = localStorage.getItem("chatHistory");
+    const savedAnalysisResult = localStorage.getItem("analysisResult");
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
+    if (savedChatHistory) {
+      setChatHistory(JSON.parse(savedChatHistory));
+    }
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+    if (savedAnalysisResult) {
+      setAnalysisResult(savedAnalysisResult);
+    }
+  }, []);
+
+  // Save chat history and analysis result to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+  }, [chatHistory]);
+
+  useEffect(() => {
+    localStorage.setItem("analysisResult", analysisResult);
+  }, [analysisResult]);
+
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setFileType(file.type);
-    setFilename(file.name);
-    setFile(file);
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+    setFileType(selectedFile.type);
+    setFilename(selectedFile.name);
   };
 
   const readFileAsBase64 = (file) => {
@@ -323,8 +949,6 @@ function SingleRecordDetails() {
 
   const handleFileUpload = async () => {
     setUploading(true);
-    setUploadSuccess(false);
-
     const genAI = new GoogleGenerativeAI(geminiApiKey);
 
     try {
@@ -340,86 +964,62 @@ function SingleRecordDetails() {
       ];
 
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+      const prompt = `You are MediSense, an AI medical assistant. Analyze the following medical report data and provide a detailed response:
+        - Is the report normal or abnormal?
+        - What health implications could the data suggest?
+        - Are there any recommendations for doctor consultation or follow-ups?
+        - Suggest precautions and potential future risks based on the data.
+        
+        Include a warning that the AI analysis should not replace professional medical advice.`;
 
-      const prompt = `Analyze the following medical report image.`; // Example prompt
-      
       const result = await model.generateContent([prompt, ...imageParts]);
       const response = await result.response;
       const text = response.text();
       setAnalysisResult(text);
 
-      // Update chat history with analysis result
-      setChatHistory([...chatHistory, { role: "ai", content: text }]);
+      // Update chat history with the initial analysis
+      setChatHistory((prev) => [
+        ...prev,
+        { role: "system", content: "Medical report uploaded and analyzed." },
+        { role: "assistant", content: text },
+      ]);
 
-      // Update the record with analysis result
-      const updatedRecord = await updateRecord({
-        documentID: state.id,
-        analysisResult: text,
-        kanbanRecords: "",
-      });
-
-      setUploadSuccess(true);
-      setIsModalOpen(false);
+      setIsModalOpen(false); // Close modal
       setFilename("");
       setFile(null);
       setFileType("");
     } catch (error) {
       console.error("Error uploading file:", error);
-      setUploadSuccess(false);
     } finally {
       setUploading(false);
     }
   };
 
-  // Handle chat input submission
-  const handleChatSubmit = async () => {
-    if (!chatInput) return;
-
+  const handleChatSubmit = async (userInput) => {
     const genAI = new GoogleGenerativeAI(geminiApiKey);
 
     try {
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+      const chatPrompt = `
+        You are MediSense, an AI assistant. Based on the uploaded medical report analysis, answer user questions accurately. 
+        Use the following context:
+        ${analysisResult}
 
-      const prompt = `User: ${chatInput}\nMediSense AI based on the medical analysis: ${analysisResult}\nResponse:`;
+        User query: ${userInput}
+      `;
 
-      const result = await model.generateContent([prompt]);
+      const result = await model.generateContent(chatPrompt);
       const response = await result.response;
-      const text = response.text();
+      const botReply = response.text();
 
-      // Update chat history with user input and AI response
-      setChatHistory([
-        ...chatHistory,
-        { role: "user", content: chatInput },
-        { role: "ai", content: text },
+      setChatHistory((prev) => [
+        ...prev,
+        { role: "user", content: userInput },
+        { role: "assistant", content: botReply },
       ]);
-
-      setChatInput(""); // Clear the input field
     } catch (error) {
-      console.error("Error in chat:", error);
+      console.error("Error during chatbot interaction:", error);
     }
-  };
-
-  const processTreatmentPlan = async () => {
-    setIsProcessing(true);
-
-    const genAI = new GoogleGenerativeAI(geminiApiKey);
-
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
-
-    const prompt = `...` // Your treatment plan prompt
-
-    const result = await model.generateContent([prompt]);
-    const response = await result.response;
-    const text = response.text();
-    const parsedResponse = JSON.parse(text);
-
-    const updatedRecord = await updateRecord({
-      documentID: state.id,
-      kanbanRecords: text,
-    });
-
-    navigate("/screening-schedules", { state: parsedResponse });
-    setIsProcessing(false);
   };
 
   return (
@@ -427,10 +1027,10 @@ function SingleRecordDetails() {
       <button
         type="button"
         onClick={handleOpenModal}
-        className="mt-6 inline-flex items-center gap-x-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50"
+        className="mt-6 inline-flex items-center gap-x-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50"
       >
         <IconFileUpload />
-        Upload Reports
+        Upload Medical Report
       </button>
       <FileUploadModal
         isOpen={isModalOpen}
@@ -438,79 +1038,110 @@ function SingleRecordDetails() {
         onFileChange={handleFileChange}
         onFileUpload={handleFileUpload}
         uploading={uploading}
-        uploadSuccess={uploadSuccess}
         filename={filename}
       />
-      <RecordDetailsHeader recordName={state.recordName} />
-      <div className="w-full">
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="inline-block min-w-full p-1.5 align-middle">
-              <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-                <div className="border-b border-gray-200 px-6 py-4">
-                  <h2 className="text-xl font-semibold text-gray-800">
-                    Personalized AI-Driven Treatment Plan
-                  </h2>
-                  <p className="text-sm text-gray-600">
-                    A tailored medical strategy leveraging advanced AI insights.
-                  </p>
-                </div>
-
-                {/* Chat window */}
-                <div className="px-6 py-4">
-                  <h2 className="text-lg font-semibold">Chat with AI</h2>
-                  <div className="space-y-2">
-                    {chatHistory.map((message, index) => (
-                      <div
-                        key={index}
-                        className={`${
-                          message.role === "user"
-                            ? "text-right text-blue-600"
-                            : "text-left text-gray-800"
-                        }`}
-                      >
-                        <p>{message.content}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Chat input */}
-                <div className="flex items-center gap-x-2 px-6 py-4">
-                  <input
-                    type="text"
-                    value={chatInput}
-                    onChange={(e) => setChatInput(e.target.value)}
-                    className="w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    placeholder="Ask MediSense AI anything..."
+      <div className="w-full mt-6">
+        <h2 className="text-xl text-green-500 font-semibold">Medical Report Analysis</h2>
+        {analysisResult ? (
+          <div>
+            <ReactMarkdown
+              className="text-blue-100"
+              children={analysisResult}
+              components={{
+                // Customizing how headings are rendered (H1, H2, etc.)
+                h1: ({ node, ...props }) => (
+                  <h1
+                    {...props}
+                    className="text-3xl font-bold underline text-green-500 mb-4"
                   />
-                  <button
-                    onClick={handleChatSubmit}
-                    className="inline-flex items-center gap-x-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50"
+                ),
+                h2: ({ node, ...props }) => (
+                  <h2
+                    {...props}
+                    className="text-2xl font-bold underline text-green-500 mb-3"
+                  />
+                ),
+                h3: ({ node, ...props }) => (
+                  <h3
+                    {...props}
+                    className="text-xl font-bold underline text-green-500 mb-2"
+                  />
+                ),
+                // Normal paragraph (with white color for the text)
+                p: ({ node, ...props }) => (
+                  <p
+                    {...props}
+                    className="text-blue-200 mb-3"
+                  />
+                ),
+                // Handling lists if they exist (bullets or numbers)
+                ul: ({ node, ...props }) => (
+                  <ul
+                    {...props}
+                    className="list-disc pl-5 text-red-400 mb-3"
+                  />
+                ),
+                ol: ({ node, ...props }) => (
+                  <ol
+                    {...props}
+                    className="list-decimal pl-5 text-purple-500 mb-3"
+                  />
+                ),
+                li: ({ node, ...props }) => (
+                  <li
+                    {...props}
+                    className="text-white mb-2"
+                  />
+                ),
+                // Handling code blocks (optional)
+                code: ({ node, inline, className, children, ...props }) => (
+                  <code
+                    {...props}
+                    className={`bg-gray-800 text-white p-1 rounded-md ${
+                      inline ? "text-sm" : "block text-base"
+                    }`}
                   >
-                    <IconSend />
-                    Send
-                  </button>
-                </div>
-
-                <div className="px-6 py-4">
-                  <button
-                    type="button"
-                    onClick={processTreatmentPlan}
-                    disabled={processing}
-                    className="inline-flex items-center gap-x-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500"
-                  >
-                    <IconProgress />
-                    {processing ? "Processing..." : "Generate Treatment Plan"}
-                  </button>
-                </div>
-              </div>
-            </div>
+                    {children}
+                  </code>
+                ),
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => setIsChatOpen(true)}
+              className="mt-4 inline-flex items-center gap-x-2 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+            >
+              Ask Follow-Up Questions
+            </button>
           </div>
-        </div>
+        ) : (
+          <p>No analysis available yet. Upload a report to begin.</p>
+        )}
       </div>
+      {isChatOpen && (
+        <ChatBot
+          chatHistory={chatHistory}
+          onChatSubmit={handleChatSubmit}
+        />
+      )}
     </div>
   );
 }
 
-export default SingleRecordDetails;
+export default MedicalReportAnalysis;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
