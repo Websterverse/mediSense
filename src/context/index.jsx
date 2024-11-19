@@ -103,7 +103,10 @@ export const StateContextProvider = ({ children }) => {
   // Function to fetch all reminders
   const fetchReminders = useCallback(async () => {
     try {
-      const result = await db.select().from(Reminders).execute();
+      const result = await db
+        .select()
+        .from(Reminders) // Ensure `Reminders` is properly defined in schema.jsx
+        .execute();
       setReminders(result);
     } catch (error) {
       console.error("Error fetching reminders:", error);
@@ -115,8 +118,14 @@ export const StateContextProvider = ({ children }) => {
     try {
       const newReminder = await db
         .insert(Reminders)
-        .values(reminderData)
-        .returning({ id: Reminders.id })
+        .values({
+          name: reminderData.name,
+          dosage: reminderData.dosage,
+          time: reminderData.time,
+          frequency: reminderData.frequency,
+          createdBy: reminderData.createdBy, // Adjust as needed
+        })
+        .returning({ id: Reminders.columns.id })
         .execute();
       setReminders((prevReminders) => [...prevReminders, newReminder[0]]);
       return newReminder[0];
