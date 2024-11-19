@@ -32,3 +32,16 @@ export const Records = pgTable("records", {
   kanbanRecords: varchar("kanban_records").notNull(),
   createdBy: varchar("created_by").notNull(),
 });
+
+// reminders schema
+export const Reminders = {
+  id: 'reminders',
+  columns: {
+    id: 'id',
+    name: 'name',
+    dosage: 'dosage',
+    time: 'time',
+    frequency: 'frequency',
+    createdBy: 'createdBy',
+  },
+};

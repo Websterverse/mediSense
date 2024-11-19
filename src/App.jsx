@@ -5,7 +5,7 @@ import { Home, Profile, Onboarding } from "./pages";
 import MedicalRecords from "./pages/records/index";
 import ScreeningSchedule from "./pages/ScreeningSchedule";
 import SingleRecordDetails from "./pages/records/single-record-details";
-import MedicineReminders from "./pages/MedicineReminders";
+import MedicineReminders from "./pages/MedicineReminders/index";
 import { useStateContext } from "./context";
 
 

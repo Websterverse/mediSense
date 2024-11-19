@@ -1,17 +1,17 @@
+
 import React, { createContext, useContext, useState, useCallback } from "react";
 import { db } from "../utils/dbConfig"; // Adjust the path to your dbConfig
-import { Users, Records } from "../utils/schema"; // Adjust the path to your schema definitions
+import { Users, Records, Reminders } from "../utils/schema"; // Adjust the path to your schema definitions
 import { eq } from "drizzle-orm";
 
 // Create a context
 const StateContext = createContext();
 
-
-
 // Provider component
 export const StateContextProvider = ({ children }) => {
   const [users, setUsers] = useState([]);
   const [records, setRecords] = useState([]);
+  const [reminders, setReminders] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
 
   // Function to fetch all users
@@ -89,7 +89,6 @@ export const StateContextProvider = ({ children }) => {
   const updateRecord = useCallback(async (recordData) => {
     try {
       const { documentID, ...dataToUpdate } = recordData;
-      console.log(documentID, dataToUpdate);
       const updatedRecords = await db
         .update(Records)
         .set(dataToUpdate)
@@ -101,16 +100,45 @@ export const StateContextProvider = ({ children }) => {
     }
   }, []);
 
+  // Function to fetch all reminders
+  const fetchReminders = useCallback(async () => {
+    try {
+      const result = await db.select().from(Reminders).execute();
+      setReminders(result);
+    } catch (error) {
+      console.error("Error fetching reminders:", error);
+    }
+  }, []);
+
+  // Function to create a new reminder
+  const createReminder = useCallback(async (reminderData) => {
+    try {
+      const newReminder = await db
+        .insert(Reminders)
+        .values(reminderData)
+        .returning({ id: Reminders.id })
+        .execute();
+      setReminders((prevReminders) => [...prevReminders, newReminder[0]]);
+      return newReminder[0];
+    } catch (error) {
+      console.error("Error creating reminder:", error);
+      return null;
+    }
+  }, []);
+
   return (
     <StateContext.Provider
       value={{
         users,
         records,
+        reminders,
         fetchUsers,
         fetchUserByEmail,
         createUser,
         fetchUserRecords,
         createRecord,
+        createReminder,
+        fetchReminders,
         currentUser,
         updateRecord,
       }}
