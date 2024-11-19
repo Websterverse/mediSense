@@ -5,6 +5,7 @@ import { Home, Profile, Onboarding } from "./pages";
 import MedicalRecords from "./pages/records/index";
 import ScreeningSchedule from "./pages/ScreeningSchedule";
 import SingleRecordDetails from "./pages/records/single-record-details";
+import MedicineReminders from "./pages/MedicineReminders";
 import { useStateContext } from "./context";
 
 
@@ -40,6 +41,7 @@ const App = () => {
             element={<SingleRecordDetails />}
           />
           <Route path="/screening-schedules" element={<ScreeningSchedule />} />
+	  <Route path='/reminders' element={<MedicineReminders />} />
         </Routes>
       </div>
     </div>
