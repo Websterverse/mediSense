@@ -2,8 +2,8 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import "@fontsource/poppins"; // For headings
-import "@fontsource/roboto"; // For body text
+// import "@fontsource/poppins"; // For headings
+// import "@fontsource/roboto"; // For body text
 
 const departmentsArray = [
   {
@@ -285,3 +285,108 @@ const ScreeningSchedule = ({ darkMode }) => {
 };
 
 export default ScreeningSchedule;
+
+
+// import React from "react";
+
+// const ScreeningSchedule = () => {
+//   return (
+//     <div className="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+//       {/* Hero Section */}
+//       <section className="relative bg-cover bg-center h-screen bg-blue-500 bg-opacity-75">
+//         <div className="absolute inset-0 bg-black opacity-50"></div>
+//         <div className="relative z-10 text-center px-6 py-24 sm:px-12 lg:px-24">
+//           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
+//             Empowering Your Health with AI-Powered Medical Insights
+//           </h1>
+//           <p className="mt-6 text-lg sm:text-xl text-white opacity-80">
+//             Upload your medical reports and get instant, AI-driven insights to
+//             understand your health better and take control.
+//           </p>
+//           <div className="mt-8 flex justify-center gap-6">
+//             <button className="bg-green-500 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-green-600 transition duration-200">
+//               Get Started
+//             </button>
+//             <button className="bg-transparent border-2 border-white text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-white hover:text-gray-900 transition duration-200">
+//               Learn More
+//             </button>
+//           </div>
+//         </div>
+//       </section>
+
+//       {/* Features Section */}
+//       <section className="py-24 bg-white dark:bg-gray-800">
+//         <div className="max-w-screen-xl mx-auto text-center">
+//           <h2 className="text-3xl font-semibold text-gray-900 dark:text-white">
+//             Why Choose MediSense?
+//           </h2>
+//           <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+//             MediSense uses cutting-edge AI to make medical report analysis simple,
+//             accurate, and accessible for everyone.
+//           </p>
+
+//           <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+//             <div className="bg-gray-100 dark:bg-gray-700 p-8 rounded-lg shadow-lg">
+//               <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">
+//                 AI-Driven Analysis
+//               </h3>
+//               <p className="mt-4 text-gray-600 dark:text-gray-300">
+//                 Our AI-powered engine analyzes your reports to provide clear, actionable
+//                 insights into your health.
+//               </p>
+//             </div>
+//             <div className="bg-gray-100 dark:bg-gray-700 p-8 rounded-lg shadow-lg">
+//               <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">
+//                 Instant Feedback
+//               </h3>
+//               <p className="mt-4 text-gray-600 dark:text-gray-300">
+//                 Receive instant feedback on your medical reports with easy-to-understand
+//                 insights, helping you stay informed and proactive.
+//               </p>
+//             </div>
+//             <div className="bg-gray-100 dark:bg-gray-700 p-8 rounded-lg shadow-lg">
+//               <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">
+//                 Secure & Private
+//               </h3>
+//               <p className="mt-4 text-gray-600 dark:text-gray-300">
+//                 We prioritize your privacy, complying with HIPAA and GDPR standards to
+//                 keep your data safe.
+//               </p>
+//             </div>
+//           </div>
+//         </div>
+//       </section>
+
+//       {/* Call to Action Section */}
+//       <section className="bg-gradient-to-r from-green-500 to-teal-500 py-24">
+//         <div className="max-w-screen-xl mx-auto text-center text-white">
+//           <h2 className="text-3xl sm:text-4xl font-semibold">
+//             Ready to Take Control of Your Health?
+//           </h2>
+//           <p className="mt-4 text-lg">
+//             Upload your medical reports today and start gaining insights powered by AI.
+//           </p>
+//           <div className="mt-8 flex justify-center gap-6">
+//             <button className="bg-white text-gray-900 py-3 px-6 rounded-lg text-lg font-semibold hover:bg-gray-100 transition duration-200">
+//               Upload Report
+//             </button>
+//             <button className="bg-transparent border-2 border-white text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-white hover:text-gray-900 transition duration-200">
+//               Contact Support
+//             </button>
+//           </div>
+//         </div>
+//       </section>
+
+//       {/* Footer Section */}
+//       <footer className="py-12 bg-gray-900 dark:bg-gray-800 text-center text-white">
+//         <p>&copy; 2024 MediSense. All rights reserved.</p>
+//         <div className="mt-4 text-sm">
+//           <a href="#" className="hover:underline">Privacy Policy</a> |{" "}
+//           <a href="#" className="hover:underline">Terms of Service</a>
+//         </div>
+//       </footer>
+//     </div>
+//   );
+// };
+
+// export default ScreeningSchedule;

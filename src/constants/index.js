@@ -1,4 +1,4 @@
-import { records, screening, user, apps, reminders } from "../assets";
+import { records, screening, user, apps, reminders , menu } from "../assets";
 import { IconHome } from "@tabler/icons-react";
 export const navlinks = [
   {
@@ -18,7 +18,7 @@ export const navlinks = [
   },
   {
     name: "reminders",
-    imgurl: reminders,
+    imgUrl: reminders,
     link: "/reminders",
   },
   {
