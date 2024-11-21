@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
-import { sun } from "../assets";
-import { navlinks } from "../constants";
 import { IconHeartHandshake } from "@tabler/icons-react";
+import { navlinks } from "../constants";
 
 const Icon = ({ styles, name, imgUrl, isActive, disabled, handleClick }) => (
   <div
@@ -11,34 +9,35 @@ const Icon = ({ styles, name, imgUrl, isActive, disabled, handleClick }) => (
       isActive && isActive === name && "bg-[#2c2f32]"
     } flex items-center justify-center ${
       !disabled && "cursor-pointer"
-      
     } ${styles}`}
     onClick={handleClick}
   >
     {!isActive ? (
-      <img src={imgUrl} alt="fund_logo" className="h-6 w-6" />
+      <img src={imgUrl} alt={name} className="h-6 w-6" />
     ) : (
       <img
         src={imgUrl}
-        alt="fund_logo"
+        alt={name}
         className={`h-6 w-6 ${isActive !== name && "grayscale"}`}
       />
     )}
   </div>
 );
 
-const Sidebar = () => {
+const Sidebar = ({ darkMode, toggleDarkMode }) => {
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState("dashboard");
 
   return (
-    <div className="sticky top-5 flex h-[93vh] flex-col items-center justify-between">
+    <div className="sticky top-5 flex h-[93vh] flex-col items-center justify-between w-20 bg-gray-100 dark:bg-gray-800 shadow-lg">
+      {/* Logo */}
       <Link to="/">
         <div className="rounded-[10px] bg-[#2c2f32] p-2">
-          <IconHeartHandshake size={40} color="#1ec070" className=" " />
+          <IconHeartHandshake size={40} color="#1ec070" />
         </div>
       </Link>
 
+      {/* Navigation Links */}
       <div className="mt-12 flex w-[76px] flex-1 flex-col items-center justify-between rounded-[20px] bg-[#1c1c24] py-4">
         <div className="flex flex-col items-center justify-center gap-3">
           {navlinks.map((link) => (
@@ -56,7 +55,13 @@ const Sidebar = () => {
           ))}
         </div>
 
-        <Icon styles="bg-[#1c1c24] shadow-secondary" imgUrl={sun} />
+        {/* Dark/Light Mode Toggle Button */}
+        <button
+          className="mb-4 flex items-center justify-center h-10 w-10 bg-transparent rounded-lg hover:opacity-80 text-xl"
+          onClick={toggleDarkMode}
+        >
+          {darkMode ? "🌞" : "🌜"}
+        </button>
       </div>
     </div>
   );
