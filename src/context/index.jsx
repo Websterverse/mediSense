@@ -105,18 +105,19 @@ export const StateContextProvider = ({ children }) => {
     try {
       const result = await db
         .select()
-        .from(Reminders) // Ensure `Reminders` is properly defined in schema.jsx
+        .from(Reminders)
         .execute();
       setReminders(result);
     } catch (error) {
       console.error("Error fetching reminders:", error);
     }
-  }, []);
+  }, []);  
 
   // Function to create a new reminder
   const createReminder = useCallback(async (reminderData) => {
-    console.log("Reminder Data:", reminderData); // Debugging log
+    console.log("Reminder Data:", reminderData);
     try {
+      const createdAt = new Date();
       const newReminder = await db
         .insert(Reminders)
         .values({
@@ -124,15 +125,45 @@ export const StateContextProvider = ({ children }) => {
           dosage: reminderData.dosage,
           time: reminderData.time,
           frequency: reminderData.frequency,
-          createdBy: reminderData.createdBy, // Adjust as needed
+          createdBy: reminderData.createdBy,
+          createdAt: createdAt,
         })
-        .returning({ id: Reminders.id })
+        .returning({ id: Reminders.id, createdAt: Reminders.createdAt })
         .execute();
       setReminders((prevReminders) => [...prevReminders, newReminder[0]]);
       return newReminder[0];
     } catch (error) {
       console.error("Error creating reminder:", error);
       return null;
+    }
+  }, []);  
+
+  const deleteReminder = useCallback(async (id) => {
+    try {
+      await db.delete(Reminders).where(eq(Reminders.id, id)).execute();
+      setReminders((prevReminders) =>
+        prevReminders.filter((reminder) => reminder.id !== id)
+      );
+    } catch (error) {
+      console.error("Error deleting reminder:", error);
+    }
+  }, []);
+
+  const markReminderAsDone = useCallback(async (id) => {
+    try {
+      await db
+        .update(Reminders)
+        .set({ isDone: true })
+        .where(eq(Reminders.id, id))
+        .execute();
+  
+      setReminders((prevReminders) =>
+        prevReminders.map((reminder) =>
+          reminder.id === id ? { ...reminder, isDone: true } : reminder
+        )
+      );
+    } catch (error) {
+      console.error("Error marking reminder as done:", error);
     }
   }, []);
 
@@ -149,6 +180,8 @@ export const StateContextProvider = ({ children }) => {
         createRecord,
         createReminder,
         fetchReminders,
+	deleteReminder,
+	markReminderAsDone,
         currentUser,
         updateRecord,
       }}
