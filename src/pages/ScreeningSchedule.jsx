@@ -119,7 +119,7 @@ const ScreeningSchedule = ({ darkMode }) => {
       </div>
 
       {/* Departments Carousel */}
-      <div className="py-12">
+      {/*<div className="py-12">
         <h2 className="text-2xl md:text-4xl font-poppins font-semibold text-green-700 text-center mb-6">
           Our Medical Departments
         </h2>
@@ -140,23 +140,147 @@ const ScreeningSchedule = ({ darkMode }) => {
             </div>
           ))}
         </Carousel>
+      </div>*/}
+
+{/*Testimonials Section*/}
+<div className={`py-12 px-6 ${darkMode ? "bg-gray-800 text-white" : "bg-green-100 text-gray-800"}`}>
+  <h2 className="text-3xl md:text-4xl font-poppins font-semibold text-center mb-6">
+    What Our Users Say
+  </h2>
+  <div className="flex flex-wrap justify-center gap-6">
+    {[
+      {
+        quote: "MediSense helped me understand my reports instantly. Highly recommended!",
+        name: "John Doe",
+        image: "https://randomuser.me/api/portraits/men/1.jpg",
+      },
+      {
+        quote: "The AI insights were so accurate and easy to comprehend!",
+        name: "Jane Smith",
+        image: "https://randomuser.me/api/portraits/women/2.jpg",
+      },
+      {
+        quote: "The platform's ease of use and detailed insights truly make it a lifesaver. I trust MediSense with all my health reports!",
+        name: "Aditi Sharma",
+        image: "https://randomuser.me/api/portraits/women/45.jpg",
+      },
+    ].map((testimonial, index) => (
+      <div
+        key={index}
+        className={`w-full md:w-[30%] p-6 rounded-lg shadow-lg ${darkMode ? "bg-gray-700" : "bg-white"}`}
+      >
+        <img
+          src={testimonial.image}
+          alt={testimonial.name}
+          className="w-16 h-16 rounded-full mx-auto mb-4"
+        />
+        <p className="text-sm md:text-base italic text-center">
+          "{testimonial.quote}"
+        </p>
+        <p className="mt-4 text-center text-sm md:text-base font-poppins font-semibold">
+          - {testimonial.name}
+        </p>
       </div>
+    ))}
+  </div>
+</div>
+
+{/*FAQs*/}
+<div className={`py-12 px-6 ${darkMode ? "bg-gray-700 text-white" : "bg-green-50 text-gray-800"}`}>
+  <h2 className="text-3xl md:text-4xl font-poppins font-semibold text-center mb-6">
+    Frequently Asked Questions
+  </h2>
+  <div className="space-y-4">
+    {[{
+      question: "How does MediSense work?",
+      answer: "You can upload your medical reports, and our AI will analyze them to provide insights.",
+    }, {
+      question: "Is MediSense secure for uploading reports?",
+      answer: "Yes, MediSense uses advanced encryption to ensure your medical data is private and secure.",
+    }, {
+      question: "Can I get instant results?",
+      answer: "Yes, MediSense provides AI-driven insights within minutes after you upload your reports.",
+    }].map((faq, index) => (
+      <div key={index} className={`p-4 rounded-md shadow-md ${darkMode ? "bg-gray-800" : "bg-white"}`}>
+        <h4 className="text-lg font-semibold">{faq.question}</h4>
+        <p className="text-sm mt-2">{faq.answer}</p>
+      </div>
+    ))}
+  </div>
+</div>
+
+
+{/*About Developers*/}
+<div className={`py-12 px-6 ${darkMode ? "bg-gray-800 text-white" : "bg-green-50 text-gray-800"}`}>
+  <h2 className="text-3xl md:text-4xl font-poppins font-semibold text-center mb-6">
+    Meet the Developers
+  </h2>
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    {[
+      {
+        name: "Kartik Kumar",
+        role: "Full-Stack Developer",
+        image: "https://randomuser.me/api/portraits/men/2.jpg",
+      
+      },
+      {
+        name: "Amritpreet Kaur",
+        role: "Frontend Developer",
+        image: "https://randomuser.me/api/portraits/women/1.jpg",
+      },
+      {
+        name: "Jai Kumar",
+        role: "Backend Developer",
+        image: "https://randomuser.me/api/portraits/women/4.jpg",
+      },
+      {
+        name: "Khushboo Siddiqui",
+        role: "Frontend Developer",
+        image: "https://randomuser.me/api/portraits/men/3.jpg",
+      },
+      
+    ].map((developer, index) => (
+      <div
+        key={index}
+        className={`p-6 rounded-lg shadow-lg flex flex-col items-center ${
+          darkMode ? "bg-gray-700" : "bg-white"
+        }`}
+      >
+        <img
+          className="w-24 h-24 rounded-full object-cover mb-4 shadow-lg border-4 border-green-500"
+          src={developer.image}
+          alt={developer.name}
+        />
+        <h3 className="text-lg font-semibold font-poppins">{developer.name}</h3>
+        <p className="text-sm font-roboto text-gray-500 dark:text-gray-400">{developer.role}</p>
+      </div>
+    ))}
+  </div>
+</div>
+
 
       {/* Emergency Section */}
-      <div className={`flex flex-col md:flex-row items-center justify-between ${darkMode ? "bg-gray-800 text-white" : "bg-green-600 text-white"} py-8 px-6 gap-6`}>
-        <div>
-          <h1 className="text-3xl md:text-5xl font-poppins font-bold">
-            Emergency? We are here for you!
-          </h1>
-          <p className="text-lg mt-2 font-roboto">
-            Get in touch now for immediate assistance.
-          </p>
-        </div>
-        <button className="w-full md:w-48 h-12 md:h-16 bg-yellow-600 text-white rounded-lg font-poppins text-lg md:text-xl shadow-lg hover:bg-yellow-700">
-          Call Now
-        </button>
-      </div>
-    </div>
+{/* Emergency Section */}
+{/* Emergency Section */}
+<div className={`flex flex-col md:flex-row items-center justify-between ${darkMode ? "bg-gray-900 text-white" : "bg-green-500 text-white"} py-12 px-10 gap-10 rounded-lg shadow-lg`}>
+  {/* Left Content */}
+  <div className="text-center md:text-left">
+    <h1 className="text-4xl md:text-5xl font-semibold tracking-wide font-poppins">
+      Emergency? <span className="text-purple-300">We’re Here for You!</span>
+    </h1>
+    <p className="text-lg md:text-xl font-light mt-4 font-roboto">
+      Don't wait—get in touch now for immediate assistance and support.
+    </p>
+  </div>
+
+  {/* Call to Action Button */}
+  <div className="flex justify-center md:justify-end w-full md:w-auto">
+    <button className="px-8 py-4 bg-purple-300 text-white font-medium rounded-lg shadow-xl text-lg tracking-wide uppercase hover:bg-purple-400 transition-transform transform hover:scale-105">
+      Call Now
+    </button>
+  </div>
+</div>
+</div>
   );
 };
 
