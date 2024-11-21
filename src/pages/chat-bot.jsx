@@ -63,7 +63,7 @@ const ChatBot = ({ chatHistory, onChatSubmit }) => {
       <form onSubmit={handleSubmit} className="flex items-center gap-2">
         <input
           type="text"
-          className="flex-grow border rounded-lg p-2"
+          className="flex-grow border text-gray-500  rounded-lg p-2"
           placeholder="Ask your question..."
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
