@@ -50,12 +50,12 @@ const App = () => {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<Profile darkMode={darkMode} toggleDarkMode={toggleDarkMode}/>} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/medical-records" element={<MedicalRecords />} />
           <Route path="/medical-records/:id" element={<SingleRecordDetails />} />
           <Route path="/screening-schedules" element={<ScreeningSchedule darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />
-          <Route path="/reminders" element={<MedicineReminders />} />
+          <Route path="/reminders" element={<MedicineReminders darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />
         </Routes>
       </div>
     </div>

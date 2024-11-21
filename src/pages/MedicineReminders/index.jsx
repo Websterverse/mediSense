@@ -29,7 +29,7 @@ const validateReminder = (reminder) => {
 };
 
 
-const MedicineReminders = () => {
+const MedicineReminders = ({ darkMode }) => {
   const { user } = usePrivy();
   const {
     reminders,
@@ -120,12 +120,12 @@ const MedicineReminders = () => {
   };
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen">
-      <div className="flex justify-between items-center mb-6">
+    <div className={`p-8 bg-gray-100 min-h-screen ${darkMode ? "dark:bg-gray-900 dark:text-white" : "bg-green-50"}`}>
+      <div className={`flex justify-between items-center mb-6 ${darkMode ? "dark:bg-gray-900 dark:text-white" : "bg-green-50"}`}>
         <h1 className="text-2xl font-bold text-blue-600">Medicine Reminders</h1>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition"
+          className="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition00"
         >
           Add Reminder
         </button>
@@ -159,7 +159,7 @@ const MedicineReminders = () => {
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-black">
         {reminders.map((reminder) => (
           <ReminderCard
             key={reminder.id}
