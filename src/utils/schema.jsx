@@ -1,7 +1,5 @@
 import { sql } from "drizzle-orm";
-import { integer, varchar, pgTable, serial, text } from "drizzle-orm/pg-core";
-
-
+import { integer, varchar, pgTable, serial, text, time, boolean, timestamp } from "drizzle-orm/pg-core";
 
 // users schema
 export const Users = pgTable("users", {
@@ -34,14 +32,13 @@ export const Records = pgTable("records", {
 });
 
 // reminders schema
-export const Reminders = {
-  id: 'reminders',
-  columns: {
-    id: 'id',
-    name: 'name',
-    dosage: 'dosage',
-    time: 'time',
-    frequency: 'frequency',
-    createdBy: 'createdBy',
-  },
-};
+export const Reminders = pgTable("reminders", {
+  id: serial("id").primaryKey(),
+  name: varchar("name").notNull(),
+  dosage: varchar("dosage").notNull(),
+  time: time("time").notNull(),
+  frequency: varchar("frequency").notNull(),
+  createdBy: varchar("created_by").notNull(),
+  isDone: boolean("is_done").default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
