@@ -1,25 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { IconCirclePlus } from "@tabler/icons-react";
+import { usePrivy } from "@privy-io/react-auth";
 import { useStateContext } from "../../context/index";
+import { IconCirclePlus } from "@tabler/icons-react";
 import CreateReminderModal from "./components/create-reminder-modal";
 import ReminderCard from "./components/reminder-card";
 
 const MedicineReminders = () => {
-  const { reminders, fetchReminders, createReminder } = useStateContext();
+  const { user } = usePrivy(); // Access user details
+  const { reminders, fetchReminders, createReminder, fetchUserByEmail } = useStateContext();
   const [userReminders, setUserReminders] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    fetchReminders(); // Fetch all reminders for the user
-  }, [fetchReminders]);
+    if (user) {
+      fetchUserByEmail(user.email.address); // Fetch user details using email
+      fetchReminders(); // Fetch all reminders
+    }
+  }, [user, fetchUserByEmail, fetchReminders]);
 
   useEffect(() => {
     setUserReminders(reminders); // Update local reminders when context updates
   }, [reminders]);
 
   const handleCreateReminder = async (formData) => {
-    await createReminder(formData); // API call to create a new reminder
-    fetchReminders(); // Refresh reminders list
+    try {
+      // Use email as createdBy
+      const email = user?.email?.address || "default_user@example.com"; // Default fallback
+      await createReminder({
+        ...formData,
+        createdBy: email, // Set createdBy to user's email
+      });
+      fetchReminders(); // Refresh reminders list
+    } catch (error) {
+      console.error("Error creating reminder:", error);
+    }
   };
 
   return (
@@ -51,14 +65,12 @@ const MedicineReminders = () => {
         )}
       </div>
 
-      {/* Modal */}
-      {isModalOpen && (
-        <CreateReminderModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onSubmit={handleCreateReminder}
-        />
-      )}
+      {/* Modal */}  
+      <CreateReminderModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleCreateReminder}
+      />
     </div>
   );
 };

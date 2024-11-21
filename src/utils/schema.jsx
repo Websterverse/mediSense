@@ -34,14 +34,11 @@ export const Records = pgTable("records", {
 });
 
 // reminders schema
-export const Reminders = {
-  id: 'reminders',
-  columns: {
-    id: 'id',
-    name: 'name',
-    dosage: 'dosage',
-    time: 'time',
-    frequency: 'frequency',
-    createdBy: 'createdBy',
-  },
-};
+export const Reminders = pgTable("reminders", {
+  id: serial("id").primaryKey(),
+  name: varchar("name").notNull(),
+  dosage: varchar("dosage").notNull(),
+  time: varchar("time").notNull(),
+  frequency: varchar("frequency").notNull(),
+  createdBy: varchar("created_by").notNull(),
+});

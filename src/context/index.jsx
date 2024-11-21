@@ -115,6 +115,7 @@ export const StateContextProvider = ({ children }) => {
 
   // Function to create a new reminder
   const createReminder = useCallback(async (reminderData) => {
+    console.log("Reminder Data:", reminderData); // Debugging log
     try {
       const newReminder = await db
         .insert(Reminders)
@@ -125,7 +126,7 @@ export const StateContextProvider = ({ children }) => {
           frequency: reminderData.frequency,
           createdBy: reminderData.createdBy, // Adjust as needed
         })
-        .returning({ id: Reminders.columns.id })
+        .returning({ id: Reminders.id })
         .execute();
       setReminders((prevReminders) => [...prevReminders, newReminder[0]]);
       return newReminder[0];
