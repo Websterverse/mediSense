@@ -66,9 +66,9 @@ const ScreeningSchedule = ({ darkMode }) => {
               Easily upload your medical reports for analysis by our advanced AI-powered system and get insights instantly to make informed healthcare decisions.
             </p>
             <div className="flex flex-wrap gap-4">
-              <button className="w-full md:w-72 h-12 bg-green-700 text-white font-poppins rounded-md hover:bg-green-800 shadow-lg">
+              {/* <button className="w-full md:w-72 h-12 bg-green-700 text-white font-poppins rounded-md hover:bg-green-800 shadow-lg">
                 Upload Reports
-              </button>
+              </button> */}
               <button className="w-full md:w-48 h-12 bg-purple-300 text-white font-poppins rounded-md hover:bg-purple-400 shadow-lg">
                 Learn More
               </button>

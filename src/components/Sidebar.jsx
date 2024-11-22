@@ -5,7 +5,7 @@ import { navlinks } from "../constants";
 
 const Icon = ({ styles, name, imgUrl, isActive, disabled, handleClick }) => (
   <div
-    className={`h-[48px] w-[48px] rounded-[10px] ${
+    className={`h-[48px] w-[48px] rounded-[10px]   ${
       isActive && isActive === name && "bg-[#2c2f32]"
     } flex items-center justify-center ${
       !disabled && "cursor-pointer"
@@ -29,10 +29,10 @@ const Sidebar = ({ darkMode, toggleDarkMode }) => {
   const [isActive, setIsActive] = useState("dashboard");
 
   return (
-    <div className="sticky top-5 flex h-[93vh] flex-col items-center justify-between w-20 bg-gray-100 dark:bg-gray-800 shadow-lg">
+    <div className="sticky top-5 flex h-[93vh] flex-col items-center justify-between w-20   shadow-lg">
       {/* Logo */}
       <Link to="/">
-        <div className="rounded-[10px] bg-[#2c2f32] p-2">
+        <div className="rounded-[10px]   p-2">
           <IconHeartHandshake size={40} color="#1ec070" />
         </div>
       </Link>
