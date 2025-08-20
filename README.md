@@ -91,7 +91,7 @@ The project provides a RESTful API for managing reminders and notifications. The
 
 **👤 Author**
 
-[Your Name]
+[KARTIK KUMAR]
 
 **📝 License**
 
